@@ -1,0 +1,27 @@
+import { Algorithm } from 'jsonwebtoken';
+import { Strategy, ExtractJwt } from 'passport-jwt';
+import passport from 'passport';
+import { Request } from 'express';
+
+export const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || 'some-secret-key';
+export const JWT_ALGORITHM: Algorithm = <Algorithm>process.env.JWT_ALGORITHM || 'HS256';
+export const JWT_ACCESS_TOKEN_EXPIRES = process.env.JWT_ACCESS_TOKEN_EXPIRES || '30d';
+export const JWT_REFRESH_TOKEN_EXPIRES = process.env.JWT_REFRESH_TOKEN_EXPIRES || '180d';
+
+function cookieExtractor(req: Request) {
+    if (req && req.cookies) {
+        return req.path.indexOf('refresh') > -1 ? req.cookies['refreshToken'] : req.cookies['accessToken'];
+    }
+}
+
+const options = {
+    jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor, ExtractJwt.fromAuthHeaderAsBearerToken()]),
+    secretOrKey: JWT_SECRET_KEY,
+    algorithms: [JWT_ALGORITHM],
+};
+
+const strategy = new Strategy(options, (payload: any, done: any) => {
+    return done(null, payload);
+});
+
+passport.use(strategy);
