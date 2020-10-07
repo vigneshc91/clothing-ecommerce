@@ -1,5 +1,5 @@
-# ExpressJS Boilerplate
-ExpressJS boilerplate in typescript
+# Clothing Ecommerce
+REST API for Ecommerce application
 
 ### Tech Stack
 - NodeJS
