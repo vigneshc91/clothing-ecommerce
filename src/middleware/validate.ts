@@ -8,7 +8,7 @@ import _ from 'lodash';
  */
 export function validate(schema: any) {
     return function (req: Request, res: Response, next: NextFunction) {
-        const data = req.method === 'GET' ? req.params : req.body;
+        const data = req.method === 'GET' ? req.query : req.body;
         const { error, value } = schema.validate(data, {
             abortEarly: false,
             stripUnknown: true,
@@ -17,7 +17,7 @@ export function validate(schema: any) {
             return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({ errors: getErrorObject(error) });
         } else {
             if (req.method === 'GET') {
-                req.params = value;
+                req.query = value;
             } else {
                 req.body = value;
             }

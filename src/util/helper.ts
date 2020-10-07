@@ -16,3 +16,10 @@ export function getSHA512Hash(value: string) {
     const hash = createHash('sha512');
     return hash.update(value).digest('hex');
 }
+
+/**
+ * Get the unique number using the timestamp
+ */
+export function getUniqueNumber() {
+    return `${Date.now()}${Math.round(Math.random() * 1E9)}`;
+}

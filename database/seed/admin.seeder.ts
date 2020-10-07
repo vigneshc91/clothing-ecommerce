@@ -14,6 +14,7 @@ export default class AdminSeeder {
                 Logger.info('Admin already exist', 'SEED');
                 return false;
             }
+            data.type = Type.ADMIN;
             data.password = await hash(getSHA512Hash(data.password));
             await UserModel.create(data);
             Logger.info('Admin seeded successfully', 'SEED');

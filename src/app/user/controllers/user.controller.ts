@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { UserService } from '../services/user.service';
 import { ResponseHandler } from '../../../util/response_handler';
 import { ApiOperationGet, ApiPath, ApiOperationPost, ApiOperationPatch, ApiOperationPut } from 'swagger-express-typescript';
-import { userList, userCreate, userLogin, userProfile, userRefreshToken, userUpdateProfile, userChangePassword } from '../docs';
+import { userLogin, userProfile, userRefreshToken, userUpdateProfile, userChangePassword } from '../docs';
 import autoBind from 'auto-bind';
 
 @ApiPath({
@@ -18,30 +18,10 @@ export class UserController extends ResponseHandler {
         this.service = new UserService();
     }
 
-    @ApiOperationGet(userList)
-    public async getAllUsers(req: Request, res: Response, next: NextFunction) {
-        try {
-            const data = await this.service.getAllUser();
-            return this.handle(res, data);
-        } catch (error) {
-            return next(error);
-        }
-    }
-
     @ApiOperationGet(userProfile)
     public async getProfile(req: any, res: Response, next: NextFunction) {
         try {
             const data = await this.service.getUserByEmail(req.decodedToken.data.email);
-            return this.handle(res, data);
-        } catch (error) {
-            return next(error);
-        }
-    }
-
-    @ApiOperationPost(userCreate)
-    public async createUser(req: Request, res: Response, next: NextFunction) {
-        try {
-            const data = await this.service.createUser(req.body);
             return this.handle(res, data);
         } catch (error) {
             return next(error);

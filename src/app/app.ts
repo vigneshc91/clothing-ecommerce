@@ -1,9 +1,11 @@
 import { app } from '../server';
 import { userRouter } from './user/routes/user.route';
+import { categoryRouter } from './product/routes/category.route';
+import { productRouter } from './product/routes/product.route';
 import { urlencoded, json } from 'body-parser';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
-import { Request, Response, NextFunction } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import cors from 'cors';
 import { Logger } from '../util/logger';
@@ -26,6 +28,7 @@ app.use(helmet());
 app.use(cors(corsOptions));
 app.use(passport.initialize());
 app.use(throttle);
+app.use(express.static('./storage/uploads'));
 app.use(swagger);
 app.use(
     '/api-docs',
@@ -42,6 +45,8 @@ app.get('/', (req, res) => {
 });
 
 app.use(`${BASE_URL}/users`, userRouter);
+app.use(`${BASE_URL}/categories`, categoryRouter);
+app.use(`${BASE_URL}/products`, productRouter);
 
 app.get('*', (req: Request, res: Response) => {
     return res.status(StatusCodes.NOT_FOUND).json({ errors: ErrorConstants.RESOURCE_NOT_FOUND });

@@ -7,27 +7,6 @@ import _ from 'lodash';
 import { ErrorConstants } from '../../../config/error_constants';
 
 export class UserService {
-    /**
-     * Get list of all users
-     */
-    public async getAllUser(): Promise<AppResponse> {
-        try {
-            const user = await UserModel.find({ status: { $ne: Status.DELETED } });
-
-            return {
-                success: true,
-                data: user,
-                statusCode: StatusCodes.OK,
-            };
-        } catch (error) {
-            return {
-                success: false,
-                errors: error,
-                exception: error,
-                statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
-            };
-        }
-    }
 
     /**
      * Get the user by its email
@@ -56,42 +35,6 @@ export class UserService {
                 success: true,
                 data: user,
                 statusCode: StatusCodes.OK,
-            };
-        } catch (error) {
-            return {
-                success: false,
-                errors: error,
-                exception: error,
-                statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
-            };
-        }
-    }
-
-    /**
-     * Create a new user
-     * @param data any
-     */
-    public async createUser(data: any): Promise<AppResponse> {
-        try {
-            const isEmailAlreadyExist = await this.getUserByEmail(data.email);
-            if (isEmailAlreadyExist.success) {
-                return {
-                    success: false,
-                    errors: ErrorConstants.EMAIL_ALREADY_EXIST,
-                    statusCode: StatusCodes.BAD_REQUEST,
-                };
-            }
-            data.type = Type.USER;
-            data.password = await hash(data.password);
-            const user = await UserModel.create(data);
-
-            let userData = user.toObject();
-            delete userData.password;
-
-            return {
-                success: true,
-                data: userData,
-                statusCode: StatusCodes.CREATED,
             };
         } catch (error) {
             return {

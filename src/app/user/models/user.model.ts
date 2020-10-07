@@ -12,13 +12,13 @@ export enum Type {
 }
 
 export class User {
-    @prop()
+    @prop({ required: true })
     public firstName!: string;
 
-    @prop()
+    @prop({ required: true })
     public lastName!: string;
 
-    @prop()
+    @prop({ required: true })
     public email!: string;
 
     @prop({ select: false })
@@ -27,7 +27,7 @@ export class User {
     @prop({ enum: Type })
     public type!: Type;
 
-    @prop({ enum: Status, default: Status.DRAFT })
+    @prop({ enum: Status, default: Status.ACTIVE })
     public status!: Status;
 }
 
